@@ -1,0 +1,111 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    paths-ignore:
+      - ".vscode/**"
+      - "README.md"
+
+# Automatically cancel older in-progress jobs on the same branch
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name == 'pull_request_target' && github.head_ref || github.ref }}
+  cancel-in-progress: true
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  lint:
+    name: Lint
+    timeout-minutes: 3
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Status
+        run: git status
+
+      - name: Lint
+        if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.owner.login == github.repository_owner }}
+        uses: wearerequired/lint-action@v2.1.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          eslint: true
+          eslint_extensions: js,ts,cts,mts,cjs,mjs
+          prettier: true
+          auto_fix: true
+          git_name: indiebot
+          git_email: dev+indiebot@tonysull.co
+          commit_message: "chore(lint): ${linter} fix"
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          neutral_check_on_warning: true
+
+      - name: Format Check
+        run: npm run format -- --check
+
+  build:
+    name: "Build ${{ matrix.os }}"
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 3
+    strategy:
+      matrix:
+        OS: [ubuntu-latest]
+        NODE_VERSION: [16]
+      fail-fast: true
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Package
+        run: npm run build
+
+  test:
+    name: "Test ${{ matrix.os }}"
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 5
+    needs: build
+    strategy:
+      matrix:
+        OS: [ubuntu-latest, windows-latest, macos-latest]
+        NODE_VERSION: [16, 18]
+      fail-fast: false
+    env:
+      NODE_VERSION: ${{ matrix.NODE_VERSION }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Package
+        run: npm run build
+
+      - name: Test
+        run: npm run test
