@@ -1,7 +1,7 @@
 {
-  "prettier.documentSelectors": ["**/*.ts"],
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "editor.rulers": [100],
-  "editor.formatOnSave": true,
-  "editor.codeActionsOnSave": ["source.organizeImports", "source.fixAll.eslint"]
+	"prettier.documentSelectors": ["**/*.ts"],
+	"editor.defaultFormatter": "esbenp.prettier-vscode",
+	"editor.rulers": [100],
+	"editor.formatOnSave": true,
+	"editor.codeActionsOnSave": ["source.organizeImports", "source.fixAll.eslint"]
 }
