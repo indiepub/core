@@ -12,8 +12,8 @@
 		"build": "tsc",
 		"format": "prettier --ignore-path .gitignore \"**/*.+(js|ts|json)\"",
 		"format:fix": "prettier --ignore-path .gitignore \"**/*.+(js|ts|json)\" --write",
-		"lint": "eslint --ignore-path .eslintignore --ext .js,.ts .",
-		"lint:fix": "eslint --fix --ignore-path .eslintignore --ext .js,.ts --fix .",
+		"lint": "eslint --ignore-path .gitignore --ext .js,.ts .",
+		"lint:fix": "eslint --fix --ignore-path .gitignore --ext .js,.ts --fix .",
 		"test": "uvu -r tsm tests"
 	},
 	"repository": {
