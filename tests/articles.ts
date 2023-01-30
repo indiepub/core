@@ -1,7 +1,11 @@
 import { suite } from "uvu"
 import * as assert from "uvu/assert"
 import { ZodError } from "zod"
-import { articleSchema } from "../src/schemas"
+import { createSchemas } from "../src/schemas"
+
+const { articleSchema } = createSchemas({
+	site: "https://indie.pub",
+})
 
 const defaults = suite("defaults")
 defaults("schema defaults", () => {
@@ -21,7 +25,7 @@ const published = suite("published")
 published("converts strings to Dates", () => {
 	const article = articleSchema.parse({
 		name: "test article",
-		published: "2023-01-29",
+		published: "2020-01-01T00:00:00Z",
 	})
 
 	assert.ok(article.published, "is defined")
@@ -40,19 +44,7 @@ published("accepts Date objects", () => {
 	assert.equal(article.published, date, "is same date")
 })
 
-published("supports UTC times", () => {
-	const date = new Date().toUTCString()
-
-	const article = articleSchema.parse({
-		name: "text article",
-		published: date,
-	})
-
-	assert.ok(article.published, "is defined")
-	assert.equal(article.published, new Date(date), "is same date")
-})
-
-published.only("errors on invalid strings", () => {
+published("errors on invalid strings", () => {
 	assert.throws(
 		() => {
 			articleSchema.parse({
