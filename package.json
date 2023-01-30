@@ -10,6 +10,7 @@
 		"dist"
 	],
 	"scripts": {
+		"build": "tsc",
 		"format": "prettier --ignore-path .gitignore \"**/*.+(js|ts|json)\"",
 		"format:fix": "prettier --ignore-path .gitignore \"**/*.+(js|ts|json)\" --write",
 		"lint": "eslint --ignore-path .gitignore --ext .js,.ts .",
