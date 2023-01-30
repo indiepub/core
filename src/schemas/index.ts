@@ -49,6 +49,7 @@ export function createSchemas(options: SchemaOptions) {
 			.optional(),
 		/* Draft properties */
 		photo: safeUrl(options.site)
+			.or(z.array(safeUrl(options.site)))
 			.describe("one or more photos that is/are considered the primary content of the entry")
 			.optional(),
 		video: safeUrl(options.site)
