@@ -32,7 +32,7 @@ jobs:
           node-version: 16
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
       - name: Status
         run: git status
@@ -75,7 +75,7 @@ jobs:
           node-version: 16
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
       - name: Build Package
         run: npm run build
@@ -102,7 +102,7 @@ jobs:
           node-version: 16
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
       - name: Build Package
         run: npm run build
