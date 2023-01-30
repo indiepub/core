@@ -57,9 +57,24 @@ export function createSchemas(options: SchemaOptions) {
 			.optional(),
 	})
 
+	const personSchema = z.object({
+		name: z.string().describe("The full/formatted anme of the person or organization"),
+		nickname: z.string().describe("nickname, alias, or handle").optional(),
+		givenName: z.string().describe("given (often first) name").optional(),
+		familyName: z.string().describe("family (often last) name").optional(),
+		email: z.string().email().describe("email address").optional(),
+		logo: safeUrl(options.site)
+			.describe("a logo representing the person or organization, e.g. avatar icon")
+			.optional(),
+		url: safeUrl(options.site)
+			.describe("home page or other URL representing the person or organization")
+			.optional(),
+	})
+
 	return {
 		articleSchema,
 		bookmarkSchema,
 		noteSchema,
+		personSchema,
 	}
 }
