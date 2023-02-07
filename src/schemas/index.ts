@@ -48,13 +48,23 @@ export function createSchemas(options: SchemaOptions) {
 			.describe('the URL which the entry is considered a "repost" of')
 			.optional(),
 		/* Draft properties */
-		photo: safeUrl(options.site)
+		photo: z
+			.string()
+			.or(safeUrl(options.site))
+			.or(z.string().or(z.array(safeUrl(options.site))))
 			.describe("one or more photos that is/are considered the primary content of the entry")
 			.optional(),
 		video: safeUrl(options.site)
-			.or(z.array(z.string().url()))
+			.or(z.string())
+			.or(z.string().or(z.array(safeUrl(options.site))))
 			.describe("one or more videos that is/are considered the primary content of the entry")
 			.optional(),
+	})
+
+	const photoSchema = baseSchema.extend({
+		name: z.string().describe("caption of the photo, often used for figure captions"),
+		summary: z.string().describe("description of the photo, often used for alt text").optional(),
+		photo: safeUrl(options.site).describe("src URL for the original image file"),
 	})
 
 	const personSchema = z.object({
@@ -76,5 +86,6 @@ export function createSchemas(options: SchemaOptions) {
 		bookmarkSchema,
 		noteSchema,
 		personSchema,
+		photoSchema,
 	}
 }
