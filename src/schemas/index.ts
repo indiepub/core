@@ -62,8 +62,8 @@ export function createSchemas(options: SchemaOptions) {
 	})
 
 	const photoSchema = baseSchema.extend({
-		name: z.string().describe("caption of the photo"),
-		summary: z.string().describe("description of the photo").optional(),
+		name: z.string().describe("caption of the photo, often used for figure captions"),
+		summary: z.string().describe("description of the photo, often used for alt text").optional(),
 		photo: safeUrl(options.site).describe("src URL for the original image file"),
 	})
 
