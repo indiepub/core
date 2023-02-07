@@ -32,7 +32,7 @@ What the hell does that mean? Runtime checks to make sure your `Note` is actuall
 ```ts
 import { createSchemas } from "@indiepub/core"
 
-const { articleSchema, bookmarkSchema, noteSchema, personSchema } = createSchemas({
+const { articleSchema, bookmarkSchema, noteSchema, personSchema, photoSchema } = createSchemas({
 	site: "https://example.com",
 })
 
