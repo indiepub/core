@@ -1,6 +1,6 @@
 {
 	"name": "@indiepub/core",
-	"version": "1.0.0",
+	"version": "1.3.0",
 	"description": "A fresh take on the old web.",
 	"type": "module",
 	"main": "src/index.ts",
