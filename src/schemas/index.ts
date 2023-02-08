@@ -16,6 +16,13 @@ export function createSchemas() {
 			.string()
 			.describe("primary photo for an article suitable for use in a link preview")
 			.optional(),
+		uid: z
+			.string()
+			.url()
+			.describe(
+				"canonical URL for the article, used if the article was originally published on another site",
+			)
+			.optional(),
 	})
 
 	const bookmarkSchema = baseSchema.extend({
