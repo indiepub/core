@@ -27,11 +27,7 @@ export function createSchemas() {
 
 	const bookmarkSchema = baseSchema.extend({
 		/* Proposed properties */
-		bookmarkOf: z
-			.string()
-			.url()
-			.describe("original URL the entry is considered a bookmark of")
-			.optional(),
+		bookmarkOf: z.string().url().describe("original URL the entry is considered a bookmark of"),
 	})
 
 	const noteSchema = baseSchema.extend({
