@@ -2,14 +2,14 @@ import { z } from "zod"
 import { safeDate } from "../utils"
 
 export function createSchemas() {
-	const baseSchema = z.object({
+	const baseEntrySchema = z.object({
 		published: safeDate("when the entry was published").optional(),
 		updated: safeDate("when the entry was updated").optional(),
 		author: z.string().describe("who wrote the entry, optionally embedded as a Card").optional(),
 		category: z.array(z.string().min(1)).describe("entry categories/tags").default([]),
 	})
 
-	const articleSchema = baseSchema.extend({
+	const articleSchema = baseEntrySchema.extend({
 		name: z.string().describe("entry name/title"),
 		summary: z.string().describe("short entry summary").optional(),
 		featured: z
@@ -25,12 +25,12 @@ export function createSchemas() {
 			.optional(),
 	})
 
-	const bookmarkSchema = baseSchema.extend({
+	const bookmarkSchema = baseEntrySchema.extend({
 		/* Proposed properties */
 		bookmarkOf: z.string().url().describe("original URL the entry is considered a bookmark of"),
 	})
 
-	const noteSchema = baseSchema.extend({
+	const noteSchema = baseEntrySchema.extend({
 		inReplyTo: z
 			.string()
 			.url()
@@ -60,14 +60,14 @@ export function createSchemas() {
 			.optional(),
 	})
 
-	const photoSchema = baseSchema.extend({
+	const photoSchema = baseEntrySchema.extend({
 		name: z.string().describe("caption of the photo, often used for figure captions"),
 		summary: z.string().describe("description of the photo, often used for alt text").optional(),
 		photo: z.string().describe("src URL for the original image file"),
 	})
 
-	const personSchema = z.object({
-		name: z.string().describe("The full/formatted anme of the person or organization"),
+	const baseCardSchema = z.object({
+		name: z.string().describe("The full/formatted name of the person or organization"),
 		nickname: z.string().describe("nickname, alias, or handle").optional(),
 		givenName: z.string().describe("given (often first) name").optional(),
 		familyName: z.string().describe("family (often last) name").optional(),
@@ -83,6 +83,8 @@ export function createSchemas() {
 			.optional(),
 	})
 
+	const personSchema = baseCardSchema.extend({})
+
 	return {
 		articleSchema,
 		bookmarkSchema,
@@ -90,4 +92,29 @@ export function createSchemas() {
 		personSchema,
 		photoSchema,
 	}
+}
+
+export type Article = z.infer<ReturnType<typeof createSchemas>['articleSchema']>
+export type Bookmark = z.infer<ReturnType<typeof createSchemas>['bookmarkSchema']>
+export type Note = z.infer<ReturnType<typeof createSchemas>['noteSchema']>
+export type Person = z.infer<ReturnType<typeof createSchemas>['personSchema']>
+export type Photo = z.infer<ReturnType<typeof createSchemas>['photoSchema']>
+
+export type Entry = Article | Bookmark | Note | Photo
+export type Card = Person
+
+export function isArticle(entry: Entry): entry is Article {
+	return 'name' in entry
+}
+
+export function isBookmark(entry: Entry): entry is Bookmark {
+	return 'bookmarkOf' in entry
+}
+
+export function isNote(entry: Entry): entry is Note {
+	return !isArticle(entry) && !isBookmark(entry) && !isPhoto(entry)
+}
+
+export function isPhoto(entry: Entry): entry is Entry {
+	return 'photo' in entry
 }
