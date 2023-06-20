@@ -94,21 +94,21 @@ export function createSchemas() {
 	}
 }
 
-export type Article = z.infer<ReturnType<typeof createSchemas>['articleSchema']>
-export type Bookmark = z.infer<ReturnType<typeof createSchemas>['bookmarkSchema']>
-export type Note = z.infer<ReturnType<typeof createSchemas>['noteSchema']>
-export type Person = z.infer<ReturnType<typeof createSchemas>['personSchema']>
-export type Photo = z.infer<ReturnType<typeof createSchemas>['photoSchema']>
+export type Article = z.infer<ReturnType<typeof createSchemas>["articleSchema"]>
+export type Bookmark = z.infer<ReturnType<typeof createSchemas>["bookmarkSchema"]>
+export type Note = z.infer<ReturnType<typeof createSchemas>["noteSchema"]>
+export type Person = z.infer<ReturnType<typeof createSchemas>["personSchema"]>
+export type Photo = z.infer<ReturnType<typeof createSchemas>["photoSchema"]>
 
 export type Entry = Article | Bookmark | Note | Photo
 export type Card = Person
 
 export function isArticle(entry: Entry): entry is Article {
-	return 'name' in entry
+	return "name" in entry
 }
 
 export function isBookmark(entry: Entry): entry is Bookmark {
-	return 'bookmarkOf' in entry
+	return "bookmarkOf" in entry
 }
 
 export function isNote(entry: Entry): entry is Note {
@@ -116,5 +116,5 @@ export function isNote(entry: Entry): entry is Note {
 }
 
 export function isPhoto(entry: Entry): entry is Entry {
-	return 'photo' in entry
+	return "photo" in entry
 }
